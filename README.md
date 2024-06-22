@@ -7,7 +7,7 @@
 To install `pb`, run:
 
 ```sh
-pip install pb
+pip install procboss
 ```
 
 ## Usage
