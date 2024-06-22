@@ -12,8 +12,8 @@ setup(
     install_requires=[
         # No external dependencies required for this script
     ],
-    author='Your Name',
-    author_email='your.email@example.com',
+    author='ryanraposo',
+    author_email='raposo.ryan@gmail.com',
     description='A process management tool that lists or kills processes by name and port.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
@@ -23,5 +23,5 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
     ],
-    python_requires='>=3.6',
+    python_requires='>=3.6'
 )
