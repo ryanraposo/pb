@@ -3,13 +3,10 @@ import argparse
 import sys
 from collections import defaultdict
 
-def list_processes(process_name, port=None, use_sudo=False):
+def list_processes(process_name, port=None):
     try:
         # Prepare the command to execute lsof
         command = "lsof -i -P -n"
-        if use_sudo:
-            command = f"sudo {command}"
-
         result = subprocess.check_output(command, shell=True, text=True)
         lines = result.strip().split('\n')
         processes = defaultdict(list)
@@ -29,14 +26,12 @@ def list_processes(process_name, port=None, use_sudo=False):
     except subprocess.CalledProcessError:
         return {}
 
-def kill_processes(process_name, port=None, use_sudo=False):
-    processes = list_processes(process_name, port, use_sudo)
+def kill_processes(process_name, port=None):
+    processes = list_processes(process_name, port)
     killed_processes = []
     for (proc_name, pid), ports in processes.items():
         try:
             kill_command = ['kill', '-9', pid]
-            if use_sudo:
-                kill_command.insert(0, 'sudo')
             subprocess.run(kill_command, check=True)
             killed_processes.append((proc_name, pid, ports))
             print(f"Killed {proc_name} with PID {pid} on ports {', '.join(ports)}")
@@ -52,18 +47,16 @@ def main():
     list_parser = subparsers.add_parser('list', help='List processes')
     list_parser.add_argument('-n', '--name', required=True, help='Process name')
     list_parser.add_argument('-p', '--port', type=int, help='Port number')
-    list_parser.add_argument('--sudo', action='store_true', help='Use sudo for the command')
 
     # Kill command
     kill_parser = subparsers.add_parser('kill', help='Kill processes')
     kill_parser.add_argument('-n', '--name', required=True, help='Process name')
     kill_parser.add_argument('-p', '--port', type=int, help='Port number')
-    kill_parser.add_argument('--sudo', action='store_true', help='Use sudo for the command')
 
     args = parser.parse_args()
 
     if args.command == 'list':
-        processes = list_processes(args.name, port=args.port, use_sudo=args.sudo)
+        processes = list_processes(args.name, port=args.port)
         if processes:
             print("NAME PID PORTS")
             for (proc_name, pid), ports in processes.items():
@@ -73,7 +66,7 @@ def main():
             print(f"No processes found matching name '{args.name}' and port '{args.port}'.")
 
     elif args.command == 'kill':
-        killed_processes = kill_processes(args.name, args.port, args.sudo)
+        killed_processes = kill_processes(args.name, args.port)
         if killed_processes:
             print("Summary of actions:")
             for (proc_name, pid), ports in killed_processes:

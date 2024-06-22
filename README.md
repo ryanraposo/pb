@@ -7,7 +7,7 @@
 To install `pb`, run:
 
 ```sh
-pip install .
+pip install pb
 ```
 
 ## Usage
@@ -23,8 +23,8 @@ pb list -n <process name> [-p <port>]
 #### Examples
 
 ```sh
-pb list -n nginx
-pb list -n nginx -p 80
+pb list -n code
+sudo pb list -n code
 ```
 
 ### Kill Processes
@@ -38,10 +38,10 @@ pb kill -n <process name> [-p <port>]
 #### Examples
 
 ```sh
-pb kill -n nginx
-pb kill -n nginx -p 80
+pb kill -n code
+sudo pb kill -n code
 ```
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
