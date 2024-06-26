@@ -1,9 +1,8 @@
 import subprocess
 import argparse
-import sys
 from collections import defaultdict
 
-def list_processes(process_name, port=None):
+def list_processes(process_name=None, port=None):
     try:
         # Prepare the command to execute lsof
         command = "lsof -i -P -n"
@@ -12,7 +11,7 @@ def list_processes(process_name, port=None):
         processes = defaultdict(list)
 
         for line in lines[1:]:  # Skip the header line
-            if process_name.lower() in line.lower():
+            if not process_name or process_name.lower() in line.lower():
                 parts = line.split()
                 proc_name = parts[0]
                 pid = parts[1]
@@ -23,7 +22,8 @@ def list_processes(process_name, port=None):
 
         return processes
 
-    except subprocess.CalledProcessError:
+    except subprocess.CalledProcessError as e:
+        print(e)
         return {}
 
 def kill_processes(process_name, port=None):
@@ -45,7 +45,7 @@ def main():
 
     # List command
     list_parser = subparsers.add_parser('list', help='List processes')
-    list_parser.add_argument('-n', '--name', required=True, help='Process name')
+    list_parser.add_argument('-n', '--name', help='Process name')
     list_parser.add_argument('-p', '--port', type=int, help='Port number')
 
     # Kill command
@@ -58,25 +58,27 @@ def main():
     if args.command == 'list':
         processes = list_processes(args.name, port=args.port)
         if processes:
-            print("NAME PID PORTS")
+            print("\nNAME PID [PORTS]\n-----------------")
             for (proc_name, pid), ports in processes.items():
                 unique_ports = ', '.join(sorted(set(ports)))
-                print(f"{proc_name} {pid} {unique_ports}")
+                print(f"{proc_name} {pid} [{unique_ports}]")  # Square brackets around ports
         else:
-            print(f"No processes found matching name '{args.name}' and port '{args.port}'.")
+            print(f"\nNo processes found matching name '{args.name}' and port '{args.port}'.")
 
     elif args.command == 'kill':
         killed_processes = kill_processes(args.name, args.port)
         if killed_processes:
-            print("Summary of actions:")
+            print("\nSummary of actions:")
             for (proc_name, pid), ports in killed_processes:
                 unique_ports = ', '.join(sorted(set(ports)))
-                print(f"Killed {proc_name} with PID {pid} on ports {unique_ports}")
+                print(f"\nKilled {proc_name} with PID {pid} on ports [{unique_ports}]")  # Square brackets around ports
         else:
-            print(f"No processes found matching name '{args.name}' and port '{args.port}' to kill.")
+            print(f"\nNo processes found matching name '{args.name}' and port '{args.port}' to kill.")
 
     else:
         parser.print_help()
+
+    print("\n")
 
 if __name__ == "__main__":
     main()
