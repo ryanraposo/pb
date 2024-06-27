@@ -2,7 +2,7 @@
 
 Use `pb` to list or kill processes by name or port in Unix-like environments.
 
-![screenshot](./screenshot.png)
+![screenshot](https://raw.githubusercontent.com/ryanraposo/pb/main/screenshot.png)
 
 ## Features
 
