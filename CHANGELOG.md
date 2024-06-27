@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.3.1] 2024-06-27
+
+- Removal: removed the legend
+
 ## [v0.3.0] 2024-06-26
 
 - Enhancement: Added USER and COMMAND fields to the process listing output for more detailed information.

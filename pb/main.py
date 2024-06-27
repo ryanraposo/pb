@@ -156,12 +156,6 @@ def main():
                 f"\nNo processes found matching name '{name_display}' and port '{port_display}'."
             )
 
-        # Print the legend
-        print("\nLegend:")
-        print(colored("Current User", "green"))
-        print(colored("root", "red"))
-        print(colored("Other Users", "blue"))
-
     elif args.command == "kill":
         killed_processes = kill_processes(args.name, args.port, elevated=args.all)
         if killed_processes:
