@@ -31,7 +31,10 @@ def main():
         ],
     ]
 
-    current_user = os.getlogin()
+    try:
+        current_user = os.getlogin()
+    except OSError:
+        current_user = os.environ.get("USER", "unknown")
 
     def get_color(user):
         if user == "root":

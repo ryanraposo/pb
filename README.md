@@ -95,6 +95,15 @@ Kill all matching processes with elevated privileges:
 pb kill -n <process_name> --all
 ```
 
+## Development
+
+Run the test suite:
+
+```sh
+pip install -e . pytest
+pytest
+```
+
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.

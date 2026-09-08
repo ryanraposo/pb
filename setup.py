@@ -1,8 +1,17 @@
-from setuptools import setup, find_packages
+import re
+from pathlib import Path
+
+from setuptools import find_packages, setup
+
+
+def read_version():
+    text = Path("pb").joinpath("__init__.py").read_text(encoding="utf8")
+    return re.search(r'__version__\s*=\s*"(.*?)"', text).group(1)
+
 
 setup(
     name="procboss",
-    version="0.3.1",
+    version=read_version(),
     packages=find_packages(include=["pb", "pb.*"]),
     entry_points={
         "console_scripts": [
@@ -13,7 +22,7 @@ setup(
     author="ryanraposo",
     author_email="raposo.ryan@gmail.com",
     description="A process management tool that lists or kills processes by name and port.",
-    long_description=open("README.md", encoding="utf8").read(),
+    long_description=Path("README.md").read_text(encoding="utf8"),
     long_description_content_type="text/markdown",
     url="https://github.com/ryanraposo/pb",
     classifiers=[
